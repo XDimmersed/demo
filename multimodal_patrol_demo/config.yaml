@@ -1,0 +1,30 @@
+demo:
+  sequence_root: "data/demo_sequence"
+  rgb_dir: "data/demo_sequence/rgb"
+  pointcloud_dir: "data/demo_sequence/pointcloud"
+  timestamps_file: "data/demo_sequence/timestamps.txt"
+  play_fps: 10
+
+model:
+  backend: "cpu"
+  weights_path: "models/yolov5s.pt"
+  input_size: [640, 640]
+
+fusion:
+  use_projection: false
+  danger_zone:
+    x_min: 0.3
+    x_max: 0.7
+    y_min: 0.5
+    y_max: 1.0
+  min_distance_m: 0.0
+  max_distance_m: 8.0
+
+alert:
+  stay_time_threshold_s: 5.0
+
+ui:
+  window_name_rgb: "RGB View"
+  window_name_pcd: "PointCloud View"
+  font_scale: 0.6
+  line_thickness: 2
