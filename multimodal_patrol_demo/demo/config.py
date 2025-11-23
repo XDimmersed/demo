@@ -19,6 +19,7 @@ class ModelConfig:
     backend: str
     weights_path: str
     input_size: List[int]
+    use_gpu: bool = True
 
 
 @dataclass

@@ -9,6 +9,7 @@ model:
   backend: "cpu"
   weights_path: "models/yolov5s.pt"
   input_size: [640, 640]
+  use_gpu: true
 
 fusion:
   use_projection: false
