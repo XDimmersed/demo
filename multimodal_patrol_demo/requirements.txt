@@ -6,3 +6,4 @@ torchvision
 pyyaml
 matplotlib
 tqdm
+requests

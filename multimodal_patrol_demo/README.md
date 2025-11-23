@@ -9,9 +9,16 @@ multimodal_patrol_demo/
   requirements.txt
   config.yaml
   run_demo.py
-  demo/
+ demo/
   data/
 ```
+
+### LLM configuration
+To enable natural-language event narration, set an API key for your provider (default OpenAI):
+```bash
+export OPENAI_API_KEY=sk-...
+```
+The `llm` block in `config.yaml` controls provider, model, and timeouts. If the key or provider is missing, the demo falls back to template-based strings so the pipeline still runs end-to-end.
 
 ## Setup
 1. Create a Python 3.9+ environment and install dependencies:

@@ -51,12 +51,23 @@ class UIConfig:
 
 
 @dataclass
+class LLMConfig:
+    enabled: bool
+    provider: str
+    model_name: str
+    api_base: str
+    api_key_env: str
+    timeout_s: int
+
+
+@dataclass
 class AppConfig:
     demo: DemoConfig
     model: ModelConfig
     fusion: FusionConfig
     alert: AlertConfig
     ui: UIConfig
+    llm: LLMConfig
 
 
 class ConfigLoader:
@@ -78,6 +89,7 @@ class ConfigLoader:
             ),
             alert=AlertConfig(**cfg_dict["alert"]),
             ui=UIConfig(**cfg_dict["ui"]),
+            llm=LLMConfig(**cfg_dict.get("llm", {})),
         )
 
 

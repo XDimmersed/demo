@@ -9,7 +9,12 @@ class ZoneMonitor:
         self.current_target_enter_time: Optional[float] = None
         self.current_in_zone: bool = False
 
-    def update(self, targets: List[Target3D], current_time: float) -> bool:
+    def update(self, targets: List[Target3D], current_time: float) -> tuple[bool, float]:
+        """
+        Returns:
+            A tuple of (is_alert, dwell_time_seconds).
+        """
+
         person_in_zone = any(
             t.class_name == "person" and t.in_danger_zone for t in targets
         )
@@ -21,8 +26,9 @@ class ZoneMonitor:
             self.current_target_enter_time = None
             self.current_in_zone = False
 
+        dwell = 0.0
         if self.current_in_zone and self.current_target_enter_time is not None:
             dwell = current_time - self.current_target_enter_time
             if dwell >= self.stay_time_threshold_s:
-                return True
-        return False
+                return True, dwell
+        return False, dwell

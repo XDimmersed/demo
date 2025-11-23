@@ -58,11 +58,49 @@ class RGBView:
             lineType=cv2.LINE_AA,
         )
 
+    def _draw_event_text(self, img: np.ndarray, event_text: str):
+        if not event_text:
+            return
+        margin = 10
+        overlay = img.copy()
+        text_size, _ = cv2.getTextSize(
+            event_text,
+            cv2.FONT_HERSHEY_SIMPLEX,
+            self.config.ui.font_scale,
+            max(1, self.config.ui.line_thickness),
+        )
+        text_height = text_size[1] + 2 * margin
+        cv2.rectangle(
+            overlay,
+            (0, img.shape[0] - text_height),
+            (img.shape[1], img.shape[0]),
+            (255, 255, 255),
+            -1,
+        )
+        cv2.putText(
+            overlay,
+            event_text,
+            (margin, img.shape[0] - margin),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            self.config.ui.font_scale,
+            (0, 0, 0),
+            max(1, self.config.ui.line_thickness),
+            lineType=cv2.LINE_AA,
+        )
+        cv2.addWeighted(overlay, 0.8, img, 0.2, 0, img)
+
     def render(
-        self, frame: RGBFrame, det: DetectionResult, targets: List[Target3D], alert: bool
+        self,
+        frame: RGBFrame,
+        det: DetectionResult,
+        targets: List[Target3D],
+        alert: bool,
+        event_text: str = "",
     ):
         canvas = frame.image.copy()
         self._draw_detections(canvas, det)
         self._draw_targets(canvas, targets)
         self._draw_status(canvas, alert)
+        if event_text:
+            self._draw_event_text(canvas, event_text)
         cv2.imshow(self.window_name, canvas)

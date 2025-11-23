@@ -28,3 +28,11 @@ ui:
   window_name_pcd: "PointCloud View"
   font_scale: 0.6
   line_thickness: 2
+
+llm:
+  enabled: true
+  provider: "openai"
+  model_name: "gpt-4o-mini"
+  api_base: "https://api.openai.com/v1"
+  api_key_env: "OPENAI_API_KEY"
+  timeout_s: 15

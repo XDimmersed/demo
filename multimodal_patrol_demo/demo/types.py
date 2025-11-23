@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 
@@ -37,3 +37,21 @@ class Target3D:
     in_danger_zone: bool
     bbox_xyxy: np.ndarray
     timestamp: float
+
+
+@dataclass
+class AlertEvent:
+    timestamp: float
+    class_name: str
+    distance_m: float
+    zone_name: str
+    duration_s: float
+    extra_info: Optional[str] = None
+
+
+@dataclass
+class PatrolReport:
+    events: List[AlertEvent]
+    start_time: float
+    end_time: float
+    summary_text: str = ""
