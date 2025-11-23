@@ -1,0 +1,53 @@
+# Multimodal Patrol Demo
+
+This repository provides a lightweight PC demo that replays synchronized RGB images and point clouds, performs 2D detection, fuses simple 3D distance estimates, and triggers an alert when a target lingers inside a configured danger zone. The code is structured to run on CPU today while leaving an interface for a future Ascend backend.
+
+## Project structure
+```
+multimodal_patrol_demo/
+  README.md
+  requirements.txt
+  config.yaml
+  run_demo.py
+ demo/
+  data/
+```
+
+### LLM configuration
+To enable natural-language event narration, set an API key for your provider (default OpenAI):
+```bash
+export OPENAI_API_KEY=sk-...
+```
+The `llm` block in `config.yaml` controls provider, model, and timeouts. If the key or provider is missing, the demo falls back to template-based strings so the pipeline still runs end-to-end.
+
+## Setup
+1. Create a Python 3.9+ environment and install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Prepare a sequence under `data/`:
+   * If you have KITTI raw data, use the existing helper:
+     ```bash
+     python scripts/prepare_dataset.py \
+       --kitti_root /path/to/2011_09_26_drive_xxxx_sync \
+       --output_root data/demo_sequence
+     ```
+   * If you are on the target server with KITTI object data at `/root/autodl-pub/KITTI/object`, first ensure `data_object_image_2.zip` and `data_object_velodyne.zip` are extracted into that directory, then run:
+     ```bash
+     python scripts/prepare_kitti_object.py \
+       --kitti_object_root /root/autodl-pub/KITTI/object \
+       --output_root data/demo_sequence \
+       --split training \
+       --num_frames 300
+     ```
+     This will create `data/demo_sequence/{rgb,pointcloud}` plus `timestamps.txt` that the demo consumes directly.
+3. Adjust `config.yaml` paths if needed (defaults already point to `data/demo_sequence`).
+
+## Running the demo
+```bash
+python run_demo.py
+```
+The RGB view shows detections, fusion status, and alert text; the point cloud view is rendered with Open3D. Keyboard controls: `q`/`Esc` quit, `Space` pauses playback.
+
+## Ascend migration
+`demo/inference/dummy_ascend_backend.py` defines the placeholder backend that matches the CPU interface, allowing drop-in replacement when integrating Ascend inference in the future.

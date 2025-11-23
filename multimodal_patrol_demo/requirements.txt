@@ -1,0 +1,9 @@
+numpy
+opencv-python
+open3d
+torch
+torchvision
+pyyaml
+matplotlib
+tqdm
+requests
