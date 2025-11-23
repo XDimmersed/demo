@@ -25,13 +25,23 @@ The `llm` block in `config.yaml` controls provider, model, and timeouts. If the 
    ```bash
    pip install -r requirements.txt
    ```
-2. Prepare a sequence under `data/` or use the provided KITTI conversion helper:
-   ```bash
-   python scripts/prepare_dataset.py \
-     --kitti_root /path/to/2011_09_26_drive_xxxx_sync \
-     --output_root data/demo_sequence
-   ```
-3. Adjust `config.yaml` paths if needed.
+2. Prepare a sequence under `data/`:
+   * If you have KITTI raw data, use the existing helper:
+     ```bash
+     python scripts/prepare_dataset.py \
+       --kitti_root /path/to/2011_09_26_drive_xxxx_sync \
+       --output_root data/demo_sequence
+     ```
+   * If you are on the target server with KITTI object data at `/root/autodl-pub/KITTI/object`, first ensure `data_object_image_2.zip` and `data_object_velodyne.zip` are extracted into that directory, then run:
+     ```bash
+     python scripts/prepare_kitti_object.py \
+       --kitti_object_root /root/autodl-pub/KITTI/object \
+       --output_root data/demo_sequence \
+       --split training \
+       --num_frames 300
+     ```
+     This will create `data/demo_sequence/{rgb,pointcloud}` plus `timestamps.txt` that the demo consumes directly.
+3. Adjust `config.yaml` paths if needed (defaults already point to `data/demo_sequence`).
 
 ## Running the demo
 ```bash
